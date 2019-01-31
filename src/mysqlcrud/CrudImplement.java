@@ -36,6 +36,28 @@ public class CrudImplement {
         PreparedStatement ps = null;
         ResultSet rs = null;
         try {
+            String query = "select * from user where id="+id;
+            ps = connection.prepareStatement(query);
+            //ps.setString(1, id);
+            System.out.println(ps);
+            rs = ps.executeQuery();
+            while (rs.next()) {
+                System.out.println("Sl no -" + rs.getInt("id"));
+                System.out.println("name -" + rs.getString("name"));
+                System.out.println("email -" + rs.getString("email"));
+                System.out.println("---------------");
+            }
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+    }
+    
+    public void print() {
+        //DBConnection obj_DBConnection = new DBConnection();
+        //Connection connection = obj_DBConnection.get_connection();
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        try {
             String query = "select * from user";
             ps = connection.prepareStatement(query);
             //ps.setString(1, id);
