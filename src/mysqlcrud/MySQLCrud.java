@@ -10,14 +10,16 @@ public class MySQLCrud {
         
         CrudImplement obj = new CrudImplement();
         //insert data
-        obj.create_data(4, "jinu", "jinu@gmail.com");
-        obj.create_data(3, "jawad18", "jawad@gmail.com");
+        obj.insert(16, "jinu", "jinu@gmail.com");
+        obj.insert(17, "jawad18", "jawad@gmail.com");
         //read data
-        obj.read_data(2);
+        obj.read(16);
         //update data
-        obj.update_data(3, 23, "jawad2", "jawad2@gmail");
+        obj.update(16, 18, "jawad2", "jawad2@gmail");
         //delete data
-        obj.delete_data(33);
+        obj.delete(17);
+        
+        obj.print();
 
     }
 

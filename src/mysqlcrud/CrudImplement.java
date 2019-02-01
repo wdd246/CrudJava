@@ -10,14 +10,19 @@ import java.sql.ResultSet;
  */
 public class CrudImplement {
 
-    DBConnection obj_DBConnection = new DBConnection("jdbc:mysql://localhost:3306/crud", "root", "");
+    static String DB = "jdbc:mysql://localhost:3306/crud";
+    static String USERNAME = "root";
+    static String PASSWORD = "";
+    static String TABLE = "user";
+
+    DBConnection obj_DBConnection = new DBConnection(DB, USERNAME, PASSWORD);
     Connection connection = obj_DBConnection.get_connection();
 
     public boolean existID(int id) {
         PreparedStatement ps = null;
         ResultSet rs = null;
         try {
-            String query = "select id from user";
+            String query = "select id from " + TABLE;
             ps = connection.prepareStatement(query);
             System.out.println(ps);
             rs = ps.executeQuery();
@@ -26,20 +31,18 @@ public class CrudImplement {
                     return true;
                 }
             }
-
         } catch (Exception e) {
             System.out.println(e);
         }
         return false;
     }
 
-
-    public void create_data(int id, String name, String email) {
+    public void insert(int id, String name, String email) {
 
         if (!existID(id)) {
             PreparedStatement ps = null;
             try {
-                String query = "insert into user(id,name,email) values (?,?,?)";
+                String query = "insert into " + TABLE + "(id,name,email) values (?,?,?)";
                 ps = connection.prepareStatement(query);
                 ps.setInt(1, id);
                 ps.setString(2, name);
@@ -54,23 +57,26 @@ public class CrudImplement {
         }
     }
 
-    public void read_data(int id) {
+    public void read(int id) {
         PreparedStatement ps = null;
         ResultSet rs = null;
-        try {
-            String query = "select * from user where id=" + id;
-            ps = connection.prepareStatement(query);
-            //ps.setString(1, id);
-            System.out.println(ps);
-            rs = ps.executeQuery();
-            while (rs.next()) {
-                System.out.println("Sl no -" + rs.getInt("id"));
-                System.out.println("name -" + rs.getString("name"));
-                System.out.println("email -" + rs.getString("email"));
-                System.out.println("---------------");
+        if (existID(id)) {
+            try {
+                String query = "select * from " + TABLE + " where id=" + id;
+                ps = connection.prepareStatement(query);
+                System.out.println(ps);
+                rs = ps.executeQuery();
+                while (rs.next()) {
+                    System.out.print("[ ID=" + rs.getInt("id"));
+                    System.out.print(", name=" + rs.getString("name"));
+                    System.out.print(", email=" + rs.getString("email") + " ]");
+                    System.out.println();
+                }
+            } catch (Exception e) {
+                System.out.println(e);
             }
-        } catch (Exception e) {
-            System.out.println(e);
+        } else {
+            throw new IllegalArgumentException("ID to read data is not exist");
         }
     }
 
@@ -78,27 +84,26 @@ public class CrudImplement {
         PreparedStatement ps = null;
         ResultSet rs = null;
         try {
-            String query = "select * from user";
+            String query = "select * from " + TABLE;
             ps = connection.prepareStatement(query);
-            //ps.setString(1, id);
             System.out.println(ps);
             rs = ps.executeQuery();
             while (rs.next()) {
-                System.out.println("Sl no -" + rs.getInt("id"));
-                System.out.println("name -" + rs.getString("name"));
-                System.out.println("email -" + rs.getString("email"));
-                System.out.println("---------------");
+                System.out.print("[ ID=" + rs.getInt("id"));
+                System.out.print(", name=" + rs.getString("name"));
+                System.out.print(", email=" + rs.getString("email") + " ]");
+                System.out.println();
             }
         } catch (Exception e) {
             System.out.println(e);
         }
     }
 
-    public void update_data(int id, int new_id, String name, String email) {
-        if (!existID(new_id)) {
+    public void update(int id, int new_id, String name, String email) {
+        if (!existID(new_id) && existID(id)) {
             PreparedStatement ps = null;
             try {
-                String query = "update user set id=?,name=?,email=? where id=?";
+                String query = "update " + TABLE + " set id=?,name=?,email=? where id=?";
                 ps = connection.prepareStatement(query);
                 ps.setInt(1, new_id);
                 ps.setString(2, name);
@@ -114,11 +119,11 @@ public class CrudImplement {
         }
     }
 
-    public void delete_data(int id) {
+    public void delete(int id) {
         if (existID(id)) {
             PreparedStatement ps = null;
             try {
-                String query = "delete from user where id=?";
+                String query = "delete from " + TABLE + " where id=?";
                 ps = connection.prepareStatement(query);
                 ps.setInt(1, id);
                 System.out.println(ps);

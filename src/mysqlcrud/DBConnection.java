@@ -9,23 +9,23 @@ import java.sql.DriverManager;
  */
 public class DBConnection {
 
-    private String url;
-    private String username;
-    private String password;
+    private String DB;
+    private String USERNAME;
+    private String PASSWORD;
 
-    public DBConnection(String url, String username, String password) {
-        setUrl(url);
-        setUsername(username);
-        setPassword(password);
+    DBConnection(String DB, String USERNAME, String PASSWORD) {
+        setUrl(DB);
+        setUsername(USERNAME);
+        setPassword(PASSWORD);
     }
 
-    public Connection get_connection() {
+    Connection get_connection() {
 
         Connection connection = null;
 
         try {
             Class.forName("com.mysql.jdbc.Driver");
-            //(url, username, password)
+            //(DB, USERNAME, PASSWORD)
             connection = DriverManager.getConnection(getUrl(), getUsername(), getPassword());
         } catch (Exception e) {
             System.err.print(e);
@@ -34,9 +34,9 @@ public class DBConnection {
         return connection;
     }
 
-    void setUrl(String url) {
-        if(url!=null && !url.equals("")){
-            this.url = url;
+    void setUrl(String DB) {
+        if(DB!=null && !DB.equals("")){
+            this.DB = DB;
         }
         else{
             throw new IllegalArgumentException("Url is empty!");
@@ -44,12 +44,12 @@ public class DBConnection {
     }
 
     String getUrl() {
-        return url;
+        return DB;
     }
 
-    void setUsername(String username) {
-        if(username!=null && !username.equals("")){
-            this.username = username;
+    void setUsername(String USERNAME) {
+        if(USERNAME!=null && !USERNAME.equals("")){
+            this.USERNAME = USERNAME;
         }
         else{
             throw new IllegalArgumentException("Username is empty!");
@@ -57,12 +57,12 @@ public class DBConnection {
     }
 
     String getUsername() {
-        return username;
+        return USERNAME;
     }
     
-    void setPassword(String password) {
-        if(password!=null){
-            this.password = password;
+    void setPassword(String PASSWORD) {
+        if(PASSWORD!=null){
+            this.PASSWORD = PASSWORD;
         }
         else{
             throw new IllegalArgumentException("Password is empty!");
@@ -70,7 +70,7 @@ public class DBConnection {
     }
 
     String getPassword() {
-        return password;
+        return PASSWORD;
     }
 
 }
