@@ -24,7 +24,7 @@ public class CrudImplement {
         try {
             String query = "select id from " + TABLE;
             ps = connection.prepareStatement(query);
-            System.out.println(ps);
+            //System.out.println(ps);
             rs = ps.executeQuery();
             while (rs.next()) {
                 if (rs.getInt("id") == id) {
@@ -37,8 +37,26 @@ public class CrudImplement {
         return false;
     }
 
-    public void insert(int id, String name, String email) {
+    public int incInt() {
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        int inc;
+        try {
+            String query = "select id from " + TABLE + " order by id desc limit 1";
+            ps = connection.prepareStatement(query);
+            //System.out.println(ps);
+            rs = ps.executeQuery();
+            rs.next();
+            inc = rs.getInt("id");
+            return inc += 1;
+        } catch (Exception e) {
+            System.out.println(e);
+            return 0;
+        }
+    }
 
+    public void insert(String name, String email) {
+        int id = incInt();
         if (!existID(id)) {
             PreparedStatement ps = null;
             try {
@@ -47,7 +65,7 @@ public class CrudImplement {
                 ps.setInt(1, id);
                 ps.setString(2, name);
                 ps.setString(3, email);
-                System.out.println(ps);
+                //System.out.println(ps);
                 ps.executeUpdate();
             } catch (Exception e) {
                 System.out.println(e);
@@ -64,7 +82,7 @@ public class CrudImplement {
             try {
                 String query = "select * from " + TABLE + " where id=" + id;
                 ps = connection.prepareStatement(query);
-                System.out.println(ps);
+                //System.out.println(ps);
                 rs = ps.executeQuery();
                 while (rs.next()) {
                     System.out.print("[ ID=" + rs.getInt("id"));
@@ -84,9 +102,9 @@ public class CrudImplement {
         PreparedStatement ps = null;
         ResultSet rs = null;
         try {
-            String query = "select * from " + TABLE;
+            String query = "select * from " + TABLE + " order by id";
             ps = connection.prepareStatement(query);
-            System.out.println(ps);
+            //System.out.println(ps);
             rs = ps.executeQuery();
             while (rs.next()) {
                 System.out.print("[ ID=" + rs.getInt("id"));
@@ -99,7 +117,8 @@ public class CrudImplement {
         }
     }
 
-    public void update(int id, int new_id, String name, String email) {
+    public void update(int id, String name, String email) {
+        int new_id = incInt();
         if (!existID(new_id) && existID(id)) {
             PreparedStatement ps = null;
             try {
@@ -109,7 +128,7 @@ public class CrudImplement {
                 ps.setString(2, name);
                 ps.setString(3, email);
                 ps.setInt(4, id);
-                System.out.println(ps);
+                //System.out.println(ps);
                 ps.executeUpdate();
             } catch (Exception e) {
                 System.out.println(e);
@@ -126,7 +145,7 @@ public class CrudImplement {
                 String query = "delete from " + TABLE + " where id=?";
                 ps = connection.prepareStatement(query);
                 ps.setInt(1, id);
-                System.out.println(ps);
+                //System.out.println(ps);
                 ps.executeUpdate();
             } catch (Exception e) {
                 System.out.println(e);
